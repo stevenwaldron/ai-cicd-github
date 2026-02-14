@@ -13,7 +13,7 @@ class TestMath:
         assert add(-1, -1) == -2
 
     def test_multiply_two_positive(self):
-        assert multiply(2, 3) == -6
+        assert multiply(2, 3) == 6
 
     def test_multiple_zero(self):
         assert multiply(0, 3) == 0
