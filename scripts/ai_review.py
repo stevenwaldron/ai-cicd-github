@@ -5,7 +5,7 @@ client = genai.Client()
 
 def review_code(diff_text):
     """Send a code diff to Gemini for review."""
-    prompt = f"""You are an expert code reviewer. Review the following code diff and provide feedback.
+        prompt = f"""You are an expert code reviewer. Review the following code diff and provide feedback.
 
 Focus on:
 1. Security vulnerabilities
@@ -20,12 +20,20 @@ For each issue found, provide:
 
 If the code looks good, say so.
 
+IMPORTANT: At the very end of your review, add a severity summary line in exactly this format:
+SEVERITY_SUMMARY: <level>
+Where <level> is one of: CRITICAL, WARNING, GOOD
+
+Use CRITICAL if any HIGH severity issues exist.
+Use WARNING if only MEDIUM or LOW severity issues exist.
+Use GOOD if no issues found.
+
 Code diff to review:
 
 {diff_text}
 
 
-Provide your review in a clear, structured format."""
+Provide your review in a clear, structured format, ending with the SEVERITY_SUMMARY line."""
 
     response = client.models.generate_content(
         model="gemini-2.5-flash", contents=prompt
@@ -41,4 +49,10 @@ if __name__ == "__main__":
         diff_content = sys.stdin.read()
 
     review = review_code(diff_content)
+    severity = parse_severity(review)
+
     print(review)
+
+     with open("severity.txt", "w") as f:
+        f.write(severity)
+
