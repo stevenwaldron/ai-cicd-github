@@ -40,6 +40,16 @@ Provide your review in a clear, structured format, ending with the SEVERITY_SUMM
     )
     return response.text
 
+def parse_severity(review_text):
+    """Extract severity level from the review output."""
+    for line in review_text.strip().split("\n"):
+        if line.strip().startswith("SEVERITY_SUMMARY:"):
+            level = line.split(":", 1)[1].strip().upper()
+            if level in ("CRITICAL", "WARNING", "GOOD"):
+                return level
+    return "WARNING"  # Default to WARNING if parsing fails
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         diff_file = sys.argv[1]
