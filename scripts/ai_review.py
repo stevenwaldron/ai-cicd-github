@@ -53,6 +53,6 @@ if __name__ == "__main__":
 
     print(review)
 
-     with open("severity.txt", "w") as f:
+    with open("severity.txt", "w") as f:
         f.write(severity)
 
